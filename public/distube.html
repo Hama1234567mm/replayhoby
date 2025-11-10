@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispute System - 1knownXiter</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <style>
+        .management-section {
+            background: rgba(30, 30, 40, 0.8);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: #7289da;
+            border-bottom: 2px solid rgba(114, 137, 218, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        .form-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(40, 40, 60, 0.6);
+            color: white;
+            font-size: 1em;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #7289da;
+            box-shadow: 0 0 10px rgba(114, 137, 218, 0.3);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #7289da;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5b73c4;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        .dispute-list {
+            margin-top: 20px;
+        }
+
+        .dispute-item {
+            background: rgba(40, 40, 60, 0.6);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #f44336;
+        }
+
+        .dispute-users {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .user-id {
+            background: rgba(114, 137, 218, 0.2);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .embed-preview {
+            background: rgba(40, 40, 60, 0.6);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #7289da;
+        }
+
+        .preview-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #7289da;
+        }
+
+        .color-preview {
+            width: 50px;
+            height: 30px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card-small {
+            background: rgba(40, 40, 60, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number-small {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #7289da;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/discord-logo.png" alt="discord-logo"/>
+            <span>1knownXiter</span>
+        </div>
+        <div class="sidebar-nav">
+            <a href="/" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/home.png" alt="home"/>
+                <span class="nav-text">Home</span>
+            </a>
+            <a href="/distube" class="nav-item">
+                <img src="https://img.icons8.com/external-stick-figures-gan-khoon-lay/51/external-argue-children-playing-stick-figures-gan-khoon-lay.png" alt="argue icon">
+                <span class="nav-text">Dispute System</span>
+            </a>
+            <a href="/verify" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/instagram-check-mark.png" alt="verify icon">
+                <span class="nav-text">Verify System</span>
+            </a>
+            <a href="/voice" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/medium-volume--v1.png" alt="temp voice icon">
+                <span class="nav-text">Temp Voice System</span>
+            </a>
+        </div>
+        <div class="help-section">
+            <a href="/help" class="nav-item">
+                <img width="64" height="64" src="https://img.icons8.com/glyph-neue/64/help.png" alt="help"/>
+                <span class="nav-text">Need Help</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="system-header">
+            <h1 class="system-title">Dispute System</h1>
+            <div>
+                <span class="status" id="statusText">Loading...</span>
+                <label class="switch">
+                    <input type="checkbox" id="systemToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-cards">
+            <div class="stat-card-small">
+                <div class="stat-number-small" id="activeDisputes">0</div>
+                <div>Active Disputes</div>
+            </div>
+            <div class="stat-card-small">
+                <div class="stat-number-small" id="logChannelSet">No</div>
+                <div>Log Channel</div>
+            </div>
+        </div>
+
+        <!-- Log Channel Settings -->
+        <div class="management-section">
+            <h2 class="section-title">Log Channel Settings</h2>
+            <div class="form-group">
+                <label class="form-label">Log Channel ID</label>
+                <input type="text" id="logChannel" class="form-input" placeholder="Enter channel ID for dispute logs">
+            </div>
+            <button class="btn btn-primary" onclick="saveLogChannel()">Save Log Channel</button>
+        </div>
+
+        <!-- Create Dispute -->
+        <div class="management-section">
+            <h2 class="section-title">Create New Dispute</h2>
+            <div class="form-group">
+                <label class="form-label">User 1 ID</label>
+                <input type="text" id="user1" class="form-input" placeholder="Enter first user ID">
+            </div>
+            <div class="form-group">
+                <label class="form-label">User 2 ID</label>
+                <input type="text" id="user2" class="form-input" placeholder="Enter second user ID">
+            </div>
+            <button class="btn btn-primary" onclick="createDispute()">Create Dispute</button>
+        </div>
+
+        <!-- Active Disputes -->
+        <div class="management-section">
+            <h2 class="section-title">Active Disputes</h2>
+            <div id="disputesList" class="dispute-list">
+                <div style="text-align: center; color: #888; padding: 20px;">
+                    Loading disputes...
+                </div>
+            </div>
+        </div>
+
+        <!-- DM Embed Management -->
+        <div class="management-section">
+            <h2 class="section-title">DM Embed Settings</h2>
+            <div class="form-group">
+                <label class="form-label">Embed Title</label>
+                <input type="text" id="embedTitle" class="form-input" placeholder="Enter embed title">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Embed Description</label>
+                <textarea id="embedDescription" class="form-input" placeholder="Enter embed description" rows="3"></textarea>
+                <small style="color: #888; display: block; margin-top: 5px;">
+                    Available variables: &lt;server&gt; - Server name, &lt;disputed&gt; - Mention of disputed user
+                </small>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Embed Color</label>
+                <input type="color" id="embedColor" class="form-input" style="width: 80px; height: 40px;">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Thumbnail URL (optional)</label>
+                <input type="text" id="embedThumbnail" class="form-input" placeholder="Enter thumbnail URL">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Footer Text</label>
+                <input type="text" id="embedFooter" class="form-input" placeholder="Enter footer text">
+            </div>
+            <button class="btn btn-primary" onclick="saveEmbedSettings()">Save Embed Settings</button>
+
+            <!-- Embed Preview -->
+            <div class="embed-preview">
+                <div class="preview-title">Preview:</div>
+                <div id="embedPreview">
+                    Preview will appear here after saving
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSettings = {};
+        let currentDisputes = [];
+
+        // Load system status
+        async function loadSystemStatus() {
+            try {
+                const response = await fetch('/api/settings');
+                const settings = await response.json();
+                currentSettings = settings;
+                
+                const isEnabled = settings.systems.dispute;
+                const toggle = document.getElementById('systemToggle');
+                const statusText = document.getElementById('statusText');
+                
+                toggle.checked = isEnabled;
+                statusText.textContent = isEnabled ? 'ENABLED' : 'DISABLED';
+                statusText.className = `status ${isEnabled ? 'enabled' : 'disabled'}`;
+
+                // Load dispute settings
+                document.getElementById('logChannel').value = settings.disputeSettings.logChannel || '';
+                
+                // Load embed settings
+                const embed = settings.disputeSettings.embed;
+                document.getElementById('embedTitle').value = embed.title || '';
+                document.getElementById('embedDescription').value = embed.description || '';
+                document.getElementById('embedColor').value = embed.color || '#ff0000';
+                document.getElementById('embedThumbnail').value = embed.thumbnail || '';
+                document.getElementById('embedFooter').value = embed.footer || '';
+
+                updateEmbedPreview();
+                updateStats();
+
+            } catch (error) {
+                console.error('Error loading system status:', error);
+            }
+        }
+
+        // Load disputes
+        async function loadDisputes() {
+            try {
+                const response = await fetch('/api/disputes');
+                const data = await response.json();
+                currentDisputes = data.activeDisputes;
+                displayDisputes();
+                updateStats();
+            } catch (error) {
+                console.error('Error loading disputes:', error);
+            }
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('activeDisputes').textContent = currentDisputes.length;
+            document.getElementById('logChannelSet').textContent = currentSettings.disputeSettings?.logChannel ? 'Yes' : 'No';
+        }
+
+        // Display disputes
+        function displayDisputes() {
+            const container = document.getElementById('disputesList');
+            
+            if (currentDisputes.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">No active disputes</div>';
+                return;
+            }
+
+            container.innerHTML = currentDisputes.map(dispute => `
+                <div class="dispute-item">
+                    <div class="dispute-users">
+                        <div>
+                            <strong>User 1:</strong>
+                            <span class="user-id">${dispute.user1}</span>
+                        </div>
+                        <div>
+                            <strong>User 2:</strong>
+                            <span class="user-id">${dispute.user2}</span>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.9em; color: #888;">
+                        Created: ${new Date(dispute.createdAt).toLocaleString()}
+                    </div>
+                    <button class="btn btn-danger" onclick="removeDispute('${dispute.user1}', '${dispute.user2}')" style="margin-top: 10px;">
+                        Remove Dispute
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Update embed preview
+        function updateEmbedPreview() {
+            const embed = currentSettings.disputeSettings?.embed || {};
+            const preview = document.getElementById('embedPreview');
+            
+            let html = `
+                <div style="border-left: 4px solid ${embed.color || '#ff0000'}; padding-left: 15px;">
+                    <div style="font-weight: bold; margin-bottom: 8px;">${embed.title || 'Dispute Alert'}</div>
+                    <div style="margin-bottom: 8px; color: #ccc;">${(embed.description || 'You are in a dispute with <disputed>. You cannot join the same voice channels.')
+                        .replace(/<server>/g, 'Example Server')
+                        .replace(/<disputed>/g, '@User')}</div>
+                    <div style="font-size: 0.8em; color: #888;">${embed.footer || 'Dispute System'}</div>
+                </div>
+            `;
+            
+            preview.innerHTML = html;
+        }
+
+        // System toggle
+        document.getElementById('systemToggle').addEventListener('change', async function() {
+            const enabled = this.checked;
+            
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ system: 'dispute', enabled: enabled })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const statusText = document.getElementById('statusText');
+                    statusText.textContent = enabled ? 'ENABLED' : 'DISABLED';
+                    statusText.className = `status ${enabled ? 'enabled' : 'disabled'}`;
+                } else {
+                    alert('Error updating system status');
+                    this.checked = !enabled;
+                }
+            } catch (error) {
+                console.error('Error updating system:', error);
+                this.checked = !enabled;
+                alert('Error updating system status');
+            }
+        });
+
+        // Save log channel
+        async function saveLogChannel() {
+            const logChannel = document.getElementById('logChannel').value;
+            
+            try {
+                const response = await fetch('/api/dispute/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ logChannel: logChannel })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Log channel saved successfully!');
+                    updateStats();
+                } else {
+                    alert('Error saving log channel');
+                }
+            } catch (error) {
+                console.error('Error saving log channel:', error);
+                alert('Error saving log channel');
+            }
+        }
+
+        // Create dispute
+        async function createDispute() {
+            const user1 = document.getElementById('user1').value.trim();
+            const user2 = document.getElementById('user2').value.trim();
+            
+            if (!user1 || !user2) {
+                alert('Please enter both user IDs');
+                return;
+            }
+
+            if (user1 === user2) {
+                alert('User IDs cannot be the same');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/dispute/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user1, user2 })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Dispute created successfully!');
+                    document.getElementById('user1').value = '';
+                    document.getElementById('user2').value = '';
+                    loadDisputes();
+                } else {
+                    alert(result.message || 'Error creating dispute');
+                }
+            } catch (error) {
+                console.error('Error creating dispute:', error);
+                alert('Error creating dispute');
+            }
+        }
+
+        // Remove dispute
+        async function removeDispute(user1, user2) {
+            if (!confirm('Are you sure you want to remove this dispute?')) return;
+
+            try {
+                const response = await fetch('/api/dispute/remove', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user1, user2 })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Dispute removed successfully!');
+                    loadDisputes();
+                } else {
+                    alert(result.message || 'Error removing dispute');
+                }
+            } catch (error) {
+                console.error('Error removing dispute:', error);
+                alert('Error removing dispute');
+            }
+        }
+
+        // Save embed settings
+        async function saveEmbedSettings() {
+            const embed = {
+                title: document.getElementById('embedTitle').value,
+                description: document.getElementById('embedDescription').value,
+                color: document.getElementById('embedColor').value,
+                thumbnail: document.getElementById('embedThumbnail').value,
+                footer: document.getElementById('embedFooter').value
+            };
+
+            try {
+                const response = await fetch('/api/dispute/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ embed })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Embed settings saved successfully!');
+                    updateEmbedPreview();
+                } else {
+                    alert('Error saving embed settings');
+                }
+            } catch (error) {
+                console.error('Error saving embed settings:', error);
+                alert('Error saving embed settings');
+            }
+        }
+
+        // Initialize
+        loadSystemStatus();
+        loadDisputes();
+        setInterval(loadDisputes, 10000); // Refresh disputes every 10 seconds
+    </script>
+</body>
+</html>

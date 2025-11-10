@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="styles/style.css">
+<title>Page Not Found - 1knownXiter</title>
+<style>
+
+
+/* --- Help Button at Bottom --- */
+
+.help-section {
+    margin-top: auto;
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- Main Content --- */
+.main-content {
+    /* Adjusted for sidebar */
+    margin-left: 80px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    text-align: center;
+    min-height: 100vh; /* Ensure it takes full height */
+}
+
+/* --- 404 Error Card --- */
+.error-card {
+    background: rgba(40, 40, 60, 0.6);
+    padding: 50px 40px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.error-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #7289da, #5b73c4);
+}
+
+.error-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.error-code {
+    font-size: 120px;
+    font-weight: bold;
+    color: #7289da;
+    line-height: 1;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(114, 137, 218, 0.3);
+    animation: pulse 3s infinite ease-in-out;
+}
+
+.error-message {
+    font-size: 28px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.error-card p {
+    font-size: 16px;
+    color: #ccc;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.home-button {
+    display: inline-block;
+    background: linear-gradient(90deg, #7289da, #5b73c4);
+    color: white;
+    text-decoration: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(114, 137, 218, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.home-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(114, 137, 218, 0.4);
+    background: linear-gradient(90deg, #5b73c4, #7289da);
+}
+
+.home-button:active {
+    transform: translateY(-1px);
+}
+
+/* Animation for the 404 text */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    body {
+        margin-left: 0;
+        padding: 15px;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .error-code {
+        font-size: 80px;
+    }
+    
+    .error-message {
+        font-size: 22px;
+    }
+    
+    .error-card {
+        padding: 30px 20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/discord-logo.png" alt="discord-logo"/>
+        <span>1knownXiter</span>
+    </div>
+    <div class="sidebar-nav">
+        <a href="/" class="nav-item">
+            <img src="https://img.icons8.com/ios-filled/50/home.png" alt="home"/>
+            <span class="nav-text">Home</span>
+        </a>
+        <a href="/distube" class="nav-item">
+            <img src="https://img.icons8.com/external-stick-figures-gan-khoon-lay/51/external-argue-children-playing-stick-figures-gan-khoon-lay.png" alt="argue icon">
+            <span class="nav-text">Dispute System</span>
+        </a>
+        <a href="/verify" class="nav-item">
+            <img src="https://img.icons8.com/ios-filled/50/instagram-check-mark.png" alt="verify icon">
+            <span class="nav-text">Verify System</span>
+        </a>
+        <a href="/voice" class="nav-item">
+            <img src="https://img.icons8.com/ios-filled/50/medium-volume--v1.png" alt="temp voice icon">
+            <span class="nav-text">Temp Voice System</span>
+        </a>
+    </div>
+    <div class="help-section">
+        <a href="/help" class="nav-item">
+            <img width="64" height="64" src="https://img.icons8.com/glyph-neue/64/help.png" alt="help"/>
+            <span class="nav-text">Need Help</span>
+        </a>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="error-card">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">Page Not Found</p>
+        <p>The page you're looking for doesn't exist or has been moved. You can use the sidebar to navigate to an existing system.</p>
+        <a href="/" class="home-button">Return to Home</a>
+    </div>
+</div>
+
+</body>
+</html>

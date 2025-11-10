@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1knownXiter</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Header -->
+        <div class="sidebar-header">
+            <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/discord-logo.png" alt="discord-logo"/>
+            <span>1knownXiter</span>
+        </div>
+
+        <!-- Navigation Section -->
+        <div class="sidebar-nav">
+            <!-- Home Item -->
+            <a href="/" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/home.png" alt="home"/>
+                <span class="nav-text">Home</span>
+            </a>
+
+            <!-- System Items -->
+            <a href="/distube" class="nav-item">
+                <img src="https://img.icons8.com/external-stick-figures-gan-khoon-lay/51/external-argue-children-playing-stick-figures-gan-khoon-lay.png" alt="argue icon">
+                <span class="nav-text">Dispute System</span>
+            </a>
+
+            <a href="/verify" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/instagram-check-mark.png" alt="verify icon">
+                <span class="nav-text">Verify System</span>
+            </a>
+
+            <a href="/voice" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/medium-volume--v1.png" alt="temp voice icon">
+                <span class="nav-text">Temp Voice System</span>
+            </a>
+        </div>
+
+        <!-- Help Button at Bottom -->
+        <div class="help-section">
+            <a href="/help" class="nav-item">
+                <img width="64" height="64" src="https://img.icons8.com/glyph-neue/64/help.png" alt="help"/>
+                <span class="nav-text">Need Help</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="system-header">
+            <h1 class="system-title">Dashboard Home</h1>
+            <div>
+                <span class="status" id="botStatus">Loading...</span>
+                <span class="status-badge" id="botStatusBadge">OFFLINE</span>
+            </div>
+        </div>
+        
+        <div class="stats-grid">
+            <!-- Bot Status Card -->
+            <div class="stat-card">
+                <div class="stat-number" id="guildCount">0</div>
+                <div class="stat-label">Servers</div>
+                <div class="stat-subtext">Total connected guilds</div>
+            </div>
+
+            <!-- Members Card -->
+            <div class="stat-card">
+                <div class="stat-number" id="totalMembers">0</div>
+                <div class="stat-label">Total Members</div>
+                <div class="stat-subtext">Across all servers</div>
+            </div>
+
+            <!-- Online Members Card -->
+            <div class="stat-card">
+                <div class="stat-number" id="onlineMembers">0</div>
+                <div class="stat-label">Online Members</div>
+                <div class="stat-subtext">Currently active</div>
+            </div>
+
+            <!-- Systems Status Card -->
+            <div class="stat-card system-status-card">
+                <div class="stat-number" id="enabledSystems">0</div>
+                <div class="stat-label">Systems Enabled</div>
+                <div class="stat-subtext">Out of <span id="totalSystems">0</span> total systems</div>
+                <div class="systems-list" id="systemsList"></div>
+            </div>
+
+            <!-- Main Guild Card -->
+            <div class="stat-card">
+                <div class="stat-number" id="mainGuildMembers">0</div>
+                <div class="stat-label" id="mainGuildName">Main Guild</div>
+                <div class="stat-subtext">Primary server members</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load real data from API
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                // Update bot status
+                const botStatus = document.getElementById('botStatus');
+                const botStatusBadge = document.getElementById('botStatusBadge');
+                
+                if (data.bot.isConnected) {
+                    botStatus.textContent = 'ONLINE';
+                    botStatus.className = 'status enabled';
+                    botStatusBadge.textContent = 'ONLINE';
+                    botStatusBadge.className = 'status-badge online';
+                } else {
+                    botStatus.textContent = 'OFFLINE';
+                    botStatus.className = 'status disabled';
+                    botStatusBadge.textContent = 'OFFLINE';
+                    botStatusBadge.className = 'status-badge offline';
+                }
+                
+                // Update stats
+                document.getElementById('guildCount').textContent = data.bot.guildCount;
+                document.getElementById('totalMembers').textContent = data.bot.totalMembers.toLocaleString();
+                document.getElementById('onlineMembers').textContent = data.bot.onlineMembers.toLocaleString();
+                document.getElementById('enabledSystems').textContent = data.systems.enabled;
+                document.getElementById('totalSystems').textContent = data.systems.total;
+                
+                // Update main guild info
+                if (data.bot.mainGuild) {
+                    document.getElementById('mainGuildMembers').textContent = data.bot.mainGuild.memberCount.toLocaleString();
+                    document.getElementById('mainGuildName').textContent = data.bot.mainGuild.name;
+                }
+                
+                // Update enabled systems list
+                const systemsList = document.getElementById('systemsList');
+                if (data.systems.enabledList.length > 0) {
+                    systemsList.innerHTML = data.systems.enabledList
+                        .map(system => `<span>${system.charAt(0).toUpperCase() + system.slice(1)}</span>`)
+                        .join('');
+                } else {
+                    systemsList.innerHTML = '<span style="color: #888;">No systems enabled</span>';
+                }
+                
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                // Set error state
+                document.getElementById('botStatus').textContent = 'ERROR';
+                document.getElementById('botStatus').className = 'status disabled';
+                document.getElementById('botStatusBadge').textContent = 'ERROR';
+                document.getElementById('botStatusBadge').className = 'status-badge offline';
+            }
+        }
+
+        // Refresh data every 30 seconds
+        loadDashboardData();
+        setInterval(loadDashboardData, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temp Voice System - 1knownXiter</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <style>
+        .management-section {
+            background: rgba(30, 30, 40, 0.8);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: #7289da;
+            border-bottom: 2px solid rgba(114, 137, 218, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        .form-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(40, 40, 60, 0.6);
+            color: white;
+            font-size: 1em;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #7289da;
+            box-shadow: 0 0 10px rgba(114, 137, 218, 0.3);
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #7289da;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5b73c4;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card-small {
+            background: rgba(40, 40, 60, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number-small {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #7289da;
+        }
+
+        .active-channels {
+            margin-top: 20px;
+        }
+
+        .channel-item {
+            background: rgba(40, 40, 60, 0.6);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #00AE86;
+        }
+
+        .emoji-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .emoji-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .help-text {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/discord-logo.png" alt="discord-logo"/>
+            <span>1knownXiter</span>
+        </div>
+        <div class="sidebar-nav">
+            <a href="/" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/home.png" alt="home"/>
+                <span class="nav-text">Home</span>
+            </a>
+            <a href="/distube" class="nav-item">
+                <img src="https://img.icons8.com/external-stick-figures-gan-khoon-lay/51/external-argue-children-playing-stick-figures-gan-khoon-lay.png" alt="argue icon">
+                <span class="nav-text">Dispute System</span>
+            </a>
+            <a href="/verify" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/instagram-check-mark.png" alt="verify icon">
+                <span class="nav-text">Verify System</span>
+            </a>
+            <a href="/voice" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/medium-volume--v1.png" alt="temp voice icon">
+                <span class="nav-text">Temp Voice System</span>
+            </a>
+        </div>
+        <div class="help-section">
+            <a href="/help" class="nav-item">
+                <img width="64" height="64" src="https://img.icons8.com/glyph-neue/64/help.png" alt="help"/>
+                <span class="nav-text">Need Help</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="system-header">
+            <h1 class="system-title">Temp Voice System</h1>
+            <div>
+                <span class="status" id="statusText">Loading...</span>
+                <label class="switch">
+                    <input type="checkbox" id="systemToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-cards">
+            <div class="stat-card-small">
+                <div class="stat-number-small" id="activeChannels">0</div>
+                <div>Active Channels</div>
+            </div>
+            <div class="stat-card-small">
+                <div class="stat-number-small" id="voiceChannelSet">No</div>
+                <div>Voice Channel</div>
+            </div>
+            <div class="stat-card-small">
+                <div class="stat-number-small" id="logChannelSet">No</div>
+                <div>Log Channel</div>
+            </div>
+        </div>
+
+        <!-- Channel Settings -->
+        <div class="management-section">
+            <h2 class="section-title">Channel Settings</h2>
+            <div class="form-group">
+                <label class="form-label">Log Channel ID</label>
+                <input type="text" id="logChannel" class="form-input" placeholder="Enter text channel ID for control panels">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Voice Channel ID</label>
+                <input type="text" id="voiceChannel" class="form-input" placeholder="Enter voice channel ID for temp voice creation">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Category ID</label>
+                <input type="text" id="category" class="form-input" placeholder="Enter category ID for new channels">
+            </div>
+            <button class="btn btn-primary" onclick="saveChannelSettings()">Save Channel Settings</button>
+        </div>
+
+        <!-- Channel Name & Emojis -->
+        <div class="management-section">
+            <h2 class="section-title">Channel Name & Emojis</h2>
+            <div class="form-group">
+                <label class="form-label">Channel Name Template</label>
+                <input type="text" id="channelName" class="form-input" placeholder="Enter channel name template">
+                <span class="help-text">Use {OWNER_NICKNAME} for the owner's nickname. Example: "{OWNER_NICKNAME}'s Channel"</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Emojis (comma separated)</label>
+                <textarea id="emojis" class="form-input form-textarea" placeholder="Enter emojis separated by commas"></textarea>
+                <span class="help-text">Random emojis will be added to channel names. Example: 🎮,🎵,🎤,🎧,🎸</span>
+            </div>
+            <button class="btn btn-primary" onclick="saveNameSettings()">Save Name Settings</button>
+        </div>
+
+        <!-- Active Channels -->
+        <div class="management-section">
+            <h2 class="section-title">Active Temp Voice Channels</h2>
+            <div id="channelsList" class="active-channels">
+                <div style="text-align: center; color: #888; padding: 20px;">
+                    Loading channels...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSettings = {};
+        let activeChannels = [];
+
+        // Load system status
+        async function loadSystemStatus() {
+            try {
+                const [settingsResponse, channelsResponse] = await Promise.all([
+                    fetch('/api/settings'),
+                    fetch('/api/tempvoice/active')
+                ]);
+                
+                const settings = await settingsResponse.json();
+                const channels = await channelsResponse.json();
+                
+                currentSettings = settings;
+                activeChannels = channels.activeTempVoices || [];
+
+                const isEnabled = settings.systems.tempVoice;
+                const toggle = document.getElementById('systemToggle');
+                const statusText = document.getElementById('statusText');
+                
+                toggle.checked = isEnabled;
+                statusText.textContent = isEnabled ? 'ENABLED' : 'DISABLED';
+                statusText.className = `status ${isEnabled ? 'enabled' : 'disabled'}`;
+
+                // Load temp voice settings
+                const tempVoiceSettings = settings.tempVoiceSettings;
+                document.getElementById('logChannel').value = tempVoiceSettings.logChannel || '';
+                document.getElementById('voiceChannel').value = tempVoiceSettings.voiceChannel || '';
+                document.getElementById('category').value = tempVoiceSettings.category || '';
+                document.getElementById('channelName').value = tempVoiceSettings.channelName || '';
+                document.getElementById('emojis').value = tempVoiceSettings.emojis?.join(', ') || '';
+
+                updateStats();
+                displayChannels();
+
+            } catch (error) {
+                console.error('Error loading system status:', error);
+            }
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('activeChannels').textContent = activeChannels.length;
+            document.getElementById('voiceChannelSet').textContent = currentSettings.tempVoiceSettings?.voiceChannel ? 'Yes' : 'No';
+            document.getElementById('logChannelSet').textContent = currentSettings.tempVoiceSettings?.logChannel ? 'Yes' : 'No';
+        }
+
+        // Display active channels
+        function displayChannels() {
+            const container = document.getElementById('channelsList');
+            
+            if (activeChannels.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">No active temp voice channels</div>';
+                return;
+            }
+
+            container.innerHTML = activeChannels.map(channel => `
+                <div class="channel-item">
+                    <div style="margin-bottom: 10px;">
+                        <strong>Channel ID:</strong> <code>${channel.channelId}</code>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Owner:</strong> <code>${channel.ownerName}</code> (ID: <code>${channel.ownerId}</code>)
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Status:</strong> ${channel.isLocked ? '🔒 Locked' : '🔓 Unlocked'}
+                    </div>
+                    <div style="font-size: 0.9em; color: #888;">
+                        Created: ${new Date(channel.createdAt).toLocaleString()}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // System toggle
+        document.getElementById('systemToggle').addEventListener('change', async function() {
+            const enabled = this.checked;
+            
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ system: 'tempVoice', enabled: enabled })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const statusText = document.getElementById('statusText');
+                    statusText.textContent = enabled ? 'ENABLED' : 'DISABLED';
+                    statusText.className = `status ${enabled ? 'enabled' : 'disabled'}`;
+                } else {
+                    alert('Error updating system status');
+                    this.checked = !enabled;
+                }
+            } catch (error) {
+                console.error('Error updating system:', error);
+                this.checked = !enabled;
+                alert('Error updating system status');
+            }
+        });
+
+        // Save channel settings
+        async function saveChannelSettings() {
+            const settings = {
+                logChannel: document.getElementById('logChannel').value.trim(),
+                voiceChannel: document.getElementById('voiceChannel').value.trim(),
+                category: document.getElementById('category').value.trim()
+            };
+
+            try {
+                const response = await fetch('/api/tempvoice/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(settings)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Channel settings saved successfully!');
+                    updateStats();
+                } else {
+                    alert('Error saving channel settings');
+                }
+            } catch (error) {
+                console.error('Error saving channel settings:', error);
+                alert('Error saving channel settings');
+            }
+        }
+
+        // Save name settings
+        async function saveNameSettings() {
+            const emojis = document.getElementById('emojis').value.split(',').map(e => e.trim()).filter(e => e);
+            
+            const settings = {
+                channelName: document.getElementById('channelName').value.trim(),
+                emojis: emojis
+            };
+
+            try {
+                const response = await fetch('/api/tempvoice/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(settings)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Name settings saved successfully!');
+                } else {
+                    alert('Error saving name settings');
+                }
+            } catch (error) {
+                console.error('Error saving name settings:', error);
+                alert('Error saving name settings');
+            }
+        }
+
+        // Initialize
+        loadSystemStatus();
+        setInterval(loadSystemStatus, 10000); // Refresh every 10 seconds
+    </script>
+</body>
+</html>

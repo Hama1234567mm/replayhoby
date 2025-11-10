@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify System - 1knownXiter</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <style>
+        .management-section {
+            background: rgba(30, 30, 40, 0.8);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: #7289da;
+            border-bottom: 2px solid rgba(114, 137, 218, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        .form-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(40, 40, 60, 0.6);
+            color: white;
+            font-size: 1em;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #7289da;
+            box-shadow: 0 0 10px rgba(114, 137, 218, 0.3);
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #7289da;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5b73c4;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card-small {
+            background: rgba(40, 40, 60, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-number-small {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #7289da;
+        }
+
+        .embed-preview {
+            background: rgba(40, 40, 60, 0.6);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #7289da;
+        }
+
+        .preview-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #7289da;
+        }
+
+        .active-verifications {
+            margin-top: 20px;
+        }
+
+        .verification-item {
+            background: rgba(40, 40, 60, 0.6);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .role-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .role-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/discord-logo.png" alt="discord-logo"/>
+            <span>1knownXiter</span>
+        </div>
+        <div class="sidebar-nav">
+            <a href="/" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/home.png" alt="home"/>
+                <span class="nav-text">Home</span>
+            </a>
+            <a href="/distube" class="nav-item">
+                <img src="https://img.icons8.com/external-stick-figures-gan-khoon-lay/51/external-argue-children-playing-stick-figures-gan-khoon-lay.png" alt="argue icon">
+                <span class="nav-text">Dispute System</span>
+            </a>
+            <a href="/verify" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/instagram-check-mark.png" alt="verify icon">
+                <span class="nav-text">Verify System</span>
+            </a>
+            <a href="/voice" class="nav-item">
+                <img src="https://img.icons8.com/ios-filled/50/medium-volume--v1.png" alt="temp voice icon">
+                <span class="nav-text">Temp Voice System</span>
+            </a>
+        </div>
+        <div class="help-section">
+            <a href="/help" class="nav-item">
+                <img width="64" height="64" src="https://img.icons8.com/glyph-neue/64/help.png" alt="help"/>
+                <span class="nav-text">Need Help</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="system-header">
+            <h1 class="system-title">Verify System</h1>
+            <div>
+                <span class="status" id="statusText">Loading...</span>
+                <label class="switch">
+                    <input type="checkbox" id="systemToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-cards">
+            <div class="stat-card-small">
+                <div class="stat-number-small" id="activeVerifications">0</div>
+                <div>Active Verifications</div>
+            </div>
+            <div class="stat-card-small">
+                <div class="stat-number-small" id="verifyChannelSet">No</div>
+                <div>Verify Channel</div>
+            </div>
+            <div class="stat-card-small">
+                <div class="stat-number-small" id="logChannelSet">No</div>
+                <div>Log Channel</div>
+            </div>
+        </div>
+
+        <!-- Channel Settings -->
+        <div class="management-section">
+            <h2 class="section-title">Channel Settings</h2>
+            <div class="form-group">
+                <label class="form-label">Verify Channel ID</label>
+                <input type="text" id="verifyChannel" class="form-input" placeholder="Enter voice channel ID for verification requests">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Log Channel ID</label>
+                <input type="text" id="logChannel" class="form-input" placeholder="Enter text channel ID for verification logs">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Category ID</label>
+                <input type="text" id="category" class="form-input" placeholder="Enter category ID for verification rooms">
+            </div>
+            <button class="btn btn-primary" onclick="saveChannelSettings()">Save Channel Settings</button>
+        </div>
+
+        <!-- Role Settings -->
+        <div class="management-section">
+            <h2 class="section-title">Role Settings</h2>
+            <div class="form-group">
+                <label class="form-label">Admin Role IDs (comma separated)</label>
+                <input type="text" id="adminRoles" class="form-input" placeholder="Enter role IDs that can manage verifications">
+            </div>
+            <div class="role-inputs">
+                <div class="form-group">
+                    <label class="form-label">Boy Role ID</label>
+                    <input type="text" id="boyRole" class="form-input" placeholder="Enter boy role ID">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Girl Role ID</label>
+                    <input type="text" id="girlRole" class="form-input" placeholder="Enter girl role ID">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="saveRoleSettings()">Save Role Settings</button>
+        </div>
+
+        <!-- Active Verifications -->
+        <div class="management-section">
+            <h2 class="section-title">Active Verifications</h2>
+            <div id="verificationsList" class="active-verifications">
+                <div style="text-align: center; color: #888; padding: 20px;">
+                    Loading verifications...
+                </div>
+            </div>
+        </div>
+
+        <!-- DM Embed Management -->
+        <div class="management-section">
+            <h2 class="section-title">Embed Settings</h2>
+            <div class="form-group">
+                <label class="form-label">Embed Title</label>
+                <input type="text" id="embedTitle" class="form-input" placeholder="Enter embed title">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Embed Description</label>
+                <textarea id="embedDescription" class="form-input form-textarea" placeholder="Enter embed description"></textarea>
+                <small style="color: #888; display: block; margin-top: 5px;">
+                    Available variables: &lt;user&gt; - User mention, &lt;channel&gt; - Channel name, &lt;admin&gt; - Admin mention
+                </small>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Embed Color</label>
+                <input type="color" id="embedColor" class="form-input" style="width: 80px; height: 40px;">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Thumbnail URL (optional)</label>
+                <input type="text" id="embedThumbnail" class="form-input" placeholder="Enter thumbnail URL (leave empty for user avatar)">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Footer Text</label>
+                <input type="text" id="embedFooter" class="form-input" placeholder="Enter footer text">
+            </div>
+            <button class="btn btn-primary" onclick="saveEmbedSettings()">Save Embed Settings</button>
+
+            <!-- Embed Preview -->
+            <div class="embed-preview">
+                <div class="preview-title">Preview:</div>
+                <div id="embedPreview">
+                    Preview will appear here after saving
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSettings = {};
+        let activeVerifications = [];
+
+        // Load system status
+        async function loadSystemStatus() {
+            try {
+                const [settingsResponse, verificationsResponse] = await Promise.all([
+                    fetch('/api/settings'),
+                    fetch('/api/verify/active')
+                ]);
+                
+                const settings = await settingsResponse.json();
+                const verifications = await verificationsResponse.json();
+                
+                currentSettings = settings;
+                activeVerifications = verifications.activeVerifications;
+
+                const isEnabled = settings.systems.verify;
+                const toggle = document.getElementById('systemToggle');
+                const statusText = document.getElementById('statusText');
+                
+                toggle.checked = isEnabled;
+                statusText.textContent = isEnabled ? 'ENABLED' : 'DISABLED';
+                statusText.className = `status ${isEnabled ? 'enabled' : 'disabled'}`;
+
+                // Load verify settings
+                const verifySettings = settings.verifySettings;
+                document.getElementById('verifyChannel').value = verifySettings.verifyChannel || '';
+                document.getElementById('logChannel').value = verifySettings.logChannel || '';
+                document.getElementById('category').value = verifySettings.category || '';
+                document.getElementById('adminRoles').value = verifySettings.adminRoles?.join(', ') || '';
+                document.getElementById('boyRole').value = verifySettings.boyRole || '';
+                document.getElementById('girlRole').value = verifySettings.girlRole || '';
+                
+                // Load embed settings
+                const embed = verifySettings.embed;
+                document.getElementById('embedTitle').value = embed.title || '';
+                document.getElementById('embedDescription').value = embed.description || '';
+                document.getElementById('embedColor').value = embed.color || '#00ff00';
+                document.getElementById('embedThumbnail').value = embed.thumbnail || '';
+                document.getElementById('embedFooter').value = embed.footer || '';
+
+                updateEmbedPreview();
+                updateStats();
+                displayVerifications();
+
+            } catch (error) {
+                console.error('Error loading system status:', error);
+            }
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('activeVerifications').textContent = activeVerifications.length;
+            document.getElementById('verifyChannelSet').textContent = currentSettings.verifySettings?.verifyChannel ? 'Yes' : 'No';
+            document.getElementById('logChannelSet').textContent = currentSettings.verifySettings?.logChannel ? 'Yes' : 'No';
+        }
+
+        // Display active verifications
+        function displayVerifications() {
+            const container = document.getElementById('verificationsList');
+            
+            if (activeVerifications.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">No active verifications</div>';
+                return;
+            }
+
+            container.innerHTML = activeVerifications.map(verification => `
+                <div class="verification-item">
+                    <div style="margin-bottom: 10px;">
+                        <strong>User ID:</strong> <code>${verification.userId}</code>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Claimed By:</strong> ${verification.claimedBy ? `<code>${verification.claimedBy}</code>` : 'Not claimed'}
+                    </div>
+                    <div style="font-size: 0.9em; color: #888;">
+                        Created: ${new Date(verification.createdAt).toLocaleString()}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update embed preview
+        function updateEmbedPreview() {
+            const embed = currentSettings.verifySettings?.embed || {};
+            const preview = document.getElementById('embedPreview');
+            
+            let html = `
+                <div style="border-left: 4px solid ${embed.color || '#00ff00'}; padding-left: 15px;">
+                    <div style="font-weight: bold; margin-bottom: 8px;">${embed.title || 'Verification Request'}</div>
+                    <div style="margin-bottom: 8px; color: #ccc;">${(embed.description || 'User <user> is requesting verification in <channel>.\n\n**Claimed by:** <admin>')
+                        .replace(/<user>/g, '@User')
+                        .replace(/<channel>/g, '**verify-channel**')
+                        .replace(/<admin>/g, '@Admin')}</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; font-size: 0.9em;">
+                        <div><strong>User:</strong> @User</div>
+                        <div><strong>Tag:</strong> user#1234</div>
+                        <div><strong>Joined:</strong> 2 hours ago</div>
+                    </div>
+                    <div style="font-size: 0.8em; color: #888;">${embed.footer || 'Verification System'}</div>
+                </div>
+            `;
+            
+            preview.innerHTML = html;
+        }
+
+        // System toggle
+        document.getElementById('systemToggle').addEventListener('change', async function() {
+            const enabled = this.checked;
+            
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ system: 'verify', enabled: enabled })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const statusText = document.getElementById('statusText');
+                    statusText.textContent = enabled ? 'ENABLED' : 'DISABLED';
+                    statusText.className = `status ${enabled ? 'enabled' : 'disabled'}`;
+                } else {
+                    alert('Error updating system status');
+                    this.checked = !enabled;
+                }
+            } catch (error) {
+                console.error('Error updating system:', error);
+                this.checked = !enabled;
+                alert('Error updating system status');
+            }
+        });
+
+        // Save channel settings
+        async function saveChannelSettings() {
+            const settings = {
+                verifyChannel: document.getElementById('verifyChannel').value.trim(),
+                logChannel: document.getElementById('logChannel').value.trim(),
+                category: document.getElementById('category').value.trim()
+            };
+
+            try {
+                const response = await fetch('/api/verify/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(settings)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Channel settings saved successfully!');
+                    updateStats();
+                } else {
+                    alert('Error saving channel settings');
+                }
+            } catch (error) {
+                console.error('Error saving channel settings:', error);
+                alert('Error saving channel settings');
+            }
+        }
+
+        // Save role settings
+        async function saveRoleSettings() {
+            const adminRoles = document.getElementById('adminRoles').value.split(',').map(id => id.trim()).filter(id => id);
+            
+            const settings = {
+                adminRoles: adminRoles,
+                boyRole: document.getElementById('boyRole').value.trim(),
+                girlRole: document.getElementById('girlRole').value.trim()
+            };
+
+            try {
+                const response = await fetch('/api/verify/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(settings)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Role settings saved successfully!');
+                } else {
+                    alert('Error saving role settings');
+                }
+            } catch (error) {
+                console.error('Error saving role settings:', error);
+                alert('Error saving role settings');
+            }
+        }
+
+        // Save embed settings
+        async function saveEmbedSettings() {
+            const embed = {
+                title: document.getElementById('embedTitle').value,
+                description: document.getElementById('embedDescription').value,
+                color: document.getElementById('embedColor').value,
+                thumbnail: document.getElementById('embedThumbnail').value,
+                footer: document.getElementById('embedFooter').value
+            };
+
+            try {
+                const response = await fetch('/api/verify/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ embed })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Embed settings saved successfully!');
+                    updateEmbedPreview();
+                } else {
+                    alert('Error saving embed settings');
+                }
+            } catch (error) {
+                console.error('Error saving embed settings:', error);
+                alert('Error saving embed settings');
+            }
+        }
+
+        // Initialize
+        loadSystemStatus();
+        setInterval(loadSystemStatus, 10000); // Refresh every 10 seconds
+    </script>
+</body>
+</html>
