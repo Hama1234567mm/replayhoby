@@ -1,0 +1,60 @@
+{
+  "systems": {
+    "dispute": false,
+    "verify": false,
+    "tempVoice": true
+  },
+  "disputeSettings": {
+    "logChannel": "xx",
+    "embed": {
+      "title": "Dispute Alert",
+      "description": "You are in a dispute with <disputed>. You cannot join the same voice channels.",
+      "color": "#ff0000",
+      "thumbnail": "",
+      "footer": "Dispute System"
+    }
+  },
+  "verifySettings": {
+    "verifyChannel": "xx",
+    "logChannel": "xx",
+    "category": "xx",
+    "adminRoles": [],
+    "boyRole": "xx",
+    "girlRole": "xx",
+    "embed": {
+      "title": "Verification Request",
+      "description": "User <user> is requesting verification in <channel>.\n\n**Claimed by:** <admin>",
+      "color": "#00ff00",
+      "thumbnail": "",
+      "footer": "Verification System"
+    }
+  },
+  "tempVoiceSettings": {
+    "logChannel": "1437192065732575393",
+    "voiceChannel": "1433194628357685338",
+    "category": "1436489103913779340",
+    "channelName": "{OWNER_NICKNAME}'s Channel",
+    "emojis": [
+      "🎮",
+      "🎵",
+      "🎤",
+      "🎧",
+      "🎸",
+      "🎷",
+      "🎺",
+      "🥁",
+      "🎨",
+      "🎭",
+      "🎪",
+      "🎯",
+      "🎲",
+      "🎳",
+      "🏆",
+      "⭐",
+      "🌟",
+      "✨",
+      "💫",
+      "🔥"
+    ]
+  }
+}
